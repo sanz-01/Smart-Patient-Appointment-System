@@ -9,7 +9,7 @@ public class DBConnection {
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/javaproject_db";
 
     private static final String USER = "root";
-    private static final String PASSWORD = "shubh5748";
+    private static final String PASSWORD = "PASSWORD";
 
     public static Connection getConnection() {
 
