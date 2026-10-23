@@ -1,44 +1,31 @@
+
 package database;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/javaproject_db";
+    public static Connection getConnection() throws SQLException {
+        Properties properties = new Properties();
 
-    private static final String USER = "root";
-    private static final String PASSWORD = "PASSWORD";
-
-    public static Connection getConnection() {
-
-        try {
-            Connection con = DriverManager.getConnection(
-                    URL,
-                    USER,
-                    PASSWORD
+        try (FileInputStream input =
+                 new FileInputStream("config.properties")) {
+            properties.load(input);
+        } catch (IOException e) {
+            throw new SQLException(
+                "Cannot read config.properties", e
             );
-
-            System.out.println("Database Connected Successfully!");
-
-            return con;
-
-        } catch (SQLException e) {
-
-            System.out.println("Database Connection Failed!");
-            e.printStackTrace();
-
-            return null;
         }
-    }
 
-    public static void main(String[] args) {
-
-        Connection con = getConnection();
-
-        if (con != null) {
-            System.out.println("Connection test successful!");
-        }
+        return DriverManager.getConnection(
+            properties.getProperty("db.url"),
+            properties.getProperty("db.user"),
+            properties.getProperty("db.password")
+        );
     }
 }

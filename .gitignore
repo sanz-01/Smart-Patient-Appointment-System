@@ -1,0 +1,12 @@
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Compiled Java files
+out/
+*.class
+
+# Keep database credentials private
+config.properties
