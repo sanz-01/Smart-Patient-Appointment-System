@@ -1,118 +1,145 @@
 
 package ui.patient;
 
+import dao.PatientDAO;
 import java.awt.*;
+import java.sql.SQLException;
 import javax.swing.*;
 
 public class PatientLoginFrame extends JFrame {
 
-    private JTextField txtName, txtContact;
+    private final JTextField nameField = new JTextField(18);
+    private final JTextField contactField = new JTextField(18);
+
+    private final Color navy = new Color(24, 45, 82);
+    private final Color teal = new Color(35, 145, 130);
 
     public PatientLoginFrame() {
-        setTitle("Patient Login");
-        setSize(650, 430);
+        setTitle("Patient Login - Smart Care");
+        setSize(450, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
         JPanel main = new JPanel(new BorderLayout());
-        main.setBackground(Color.WHITE);
 
-        // Header
-        JPanel header = new JPanel(new GridLayout(2, 1));
-        header.setBackground(new Color(41, 128, 185));
-        header.setPreferredSize(new Dimension(650, 115));
+        JPanel header = new JPanel();
+        header.setBackground(navy);
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+        header.setBorder(BorderFactory.createEmptyBorder(22, 15, 22, 15));
 
-        JLabel title = new JLabel("PATIENT LOGIN", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 28));
+        JLabel title = new JLabel("PATIENT LOGIN");
+        title.setFont(new Font("SansSerif", Font.BOLD, 25));
         title.setForeground(Color.WHITE);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel subtitle = new JLabel(
-            "Smart Patient Appointment & Consultation Management System",
-            SwingConstants.CENTER
-        );
+        JLabel subtitle = new JLabel("Your healthcare portal");
+        subtitle.setFont(new Font("SansSerif", Font.PLAIN, 13));
         subtitle.setForeground(Color.WHITE);
+        subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         header.add(title);
+        header.add(Box.createVerticalStrut(7));
         header.add(subtitle);
 
-        // Form
         JPanel form = new JPanel(new GridBagLayout());
         form.setBackground(Color.WHITE);
+        form.setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 10, 15, 10);
+        gbc.insets = new Insets(10, 6, 10, 6);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        txtName = new JTextField(20);
-        txtContact = new JTextField(20);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        form.add(new JLabel("Patient Name"), gbc);
 
-        addField(form, gbc, "Patient Name:", txtName, 0);
-        addField(form, gbc, "Contact Number:", txtContact, 1);
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        form.add(nameField, gbc);
 
-        // Buttons
-        JButton btnLogin = new JButton("LOGIN");
-        JButton btnSignup = new JButton("SIGN UP");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0;
+        form.add(new JLabel("Contact Number"), gbc);
 
-        styleButton(btnLogin);
-        styleButton(btnSignup);
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        form.add(contactField, gbc);
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        buttons.setBackground(Color.WHITE);
-        buttons.add(btnLogin);
-        buttons.add(btnSignup);
+        JButton loginButton = new JButton("Login");
+        loginButton.setBackground(teal);
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
+        loginButton.addActionListener(e -> loginPatient());
 
-        btnLogin.addActionListener(e -> {
-            String name = txtName.getText().trim();
-            String contact = txtContact.getText().trim();
-
-            if (name.isEmpty() || contact.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                    this, "Please enter your name and contact number."
-                );
-            } else {
-                JOptionPane.showMessageDialog(
-                    this, "UI validation successful. Database login is not connected yet."
-                );
-            }
-        });
-
-        btnSignup.addActionListener(e -> {
+        JButton registerButton = new JButton("Sign Up");
+        registerButton.addActionListener(e -> {
             new PatientRegisterFrame().setVisible(true);
             dispose();
         });
 
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            new ui.common.WelcomeFrame().setVisible(true);
+            dispose();
+        });
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 5));
+        buttons.add(loginButton);
+        buttons.add(registerButton);
+        buttons.add(backButton);
+
+        JPanel center = new JPanel(new BorderLayout(10, 12));
+        center.setBorder(BorderFactory.createEmptyBorder(22, 25, 20, 25));
+        center.add(form, BorderLayout.CENTER);
+        center.add(buttons, BorderLayout.SOUTH);
+
         main.add(header, BorderLayout.NORTH);
-        main.add(form, BorderLayout.CENTER);
-        main.add(buttons, BorderLayout.SOUTH);
+        main.add(center, BorderLayout.CENTER);
 
-        add(main);
+        setContentPane(main);
+        getRootPane().setDefaultButton(loginButton);
     }
 
-    private void addField(JPanel panel, GridBagConstraints gbc,
-                          String label, JTextField field, int row) {
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        gbc.weightx = 0.3;
-        panel.add(new JLabel(label), gbc);
+    private void loginPatient() {
+        String name = nameField.getText().trim();
+        String contact = contactField.getText().trim();
 
-        gbc.gridx = 1;
-        gbc.weightx = 0.7;
-        field.setPreferredSize(new Dimension(300, 40));
-        panel.add(field, gbc);
-    }
+        if (name.isEmpty() || contact.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this, "Please enter your name and contact number."
+            );
+            return;
+        }
 
-    private void styleButton(JButton button) {
-        button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setBackground(new Color(41, 128, 185));
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(140, 40));
-    }
+        try {
+            PatientDAO dao = new PatientDAO();
+            int patientId = dao.loginPatient(name, contact);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() ->
-            new PatientLoginFrame().setVisible(true)
-        );
+            if (patientId > 0) {
+                JOptionPane.showMessageDialog(
+                    this, "Patient login successful!"
+                );
+
+                new PatientDashboardFrame(patientId).setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Patient not found. Check your details or register first.",
+                    "Login Failed",
+                    JOptionPane.WARNING_MESSAGE
+                );
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Database error: " + ex.getMessage(),
+                "Login Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 }

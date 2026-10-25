@@ -1,4 +1,4 @@
-create database javaproject_db;
+-- create database javaproject_db;
 USE javaproject_db;
 
 -- show databases;
@@ -6,54 +6,54 @@ USE javaproject_db;
 -- SHOW TABLES FROM javaproject_db;
 
 
-CREATE TABLE users (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL
-);
+-- CREATE TABLE users (
+--     user_id INT AUTO_INCREMENT PRIMARY KEY,
+--     username VARCHAR(50) NOT NULL UNIQUE,
+--     password VARCHAR(255) NOT NULL,
+--     role VARCHAR(20) NOT NULL
+-- );
 
-CREATE TABLE patients (
-    patient_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    age INT,
-    contact VARCHAR(15)
-);
+-- CREATE TABLE patients (
+--     patient_id INT AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(100) NOT NULL,
+--     age INT,
+--     contact VARCHAR(15)
+-- );
 
-CREATE TABLE doctors (
-    doctor_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    specialization VARCHAR(100) NOT NULL
-);
+-- CREATE TABLE doctors (
+--     doctor_id INT AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(100) NOT NULL,
+--     specialization VARCHAR(100) NOT NULL
+-- );
 
-CREATE TABLE appointments (
-    appointment_id INT AUTO_INCREMENT PRIMARY KEY,
-    patient_id INT NOT NULL,
-    doctor_id INT NOT NULL,
-    appointment_date DATE NOT NULL,
-    appointment_time TIME NOT NULL,
-    status VARCHAR(30) DEFAULT 'Scheduled',
+-- CREATE TABLE appointments (
+--     appointment_id INT AUTO_INCREMENT PRIMARY KEY,
+--     patient_id INT NOT NULL,
+--     doctor_id INT NOT NULL,
+--     appointment_date DATE NOT NULL,
+--     appointment_time TIME NOT NULL,
+--     status VARCHAR(30) DEFAULT 'Scheduled',
 
-    FOREIGN KEY (patient_id)
-        REFERENCES patients(patient_id)
-        ON DELETE CASCADE,
+--     FOREIGN KEY (patient_id)
+--         REFERENCES patients(patient_id)
+--         ON DELETE CASCADE,
 
-    FOREIGN KEY (doctor_id)
-        REFERENCES doctors(doctor_id)
-        ON DELETE CASCADE
-);
+--     FOREIGN KEY (doctor_id)
+--         REFERENCES doctors(doctor_id)
+--         ON DELETE CASCADE
+-- );
 
-CREATE TABLE consultations (
-    consultation_id INT AUTO_INCREMENT PRIMARY KEY,
-    appointment_id INT NOT NULL,
-    diagnosis TEXT,
-    prescription TEXT,
-    notes TEXT,
+-- CREATE TABLE consultations (
+--     consultation_id INT AUTO_INCREMENT PRIMARY KEY,
+--     appointment_id INT NOT NULL,
+--     diagnosis TEXT,
+--     prescription TEXT,
+--     notes TEXT,
 
-    FOREIGN KEY (appointment_id)
-        REFERENCES appointments(appointment_id)
-        ON DELETE CASCADE
-);
+--     FOREIGN KEY (appointment_id)
+--         REFERENCES appointments(appointment_id)
+--         ON DELETE CASCADE
+-- );
 
 -- SAMPLE USERS
 INSERT INTO users (username, password, role)
@@ -65,9 +65,9 @@ VALUES
 -- SAMPLE PATIENTS
 INSERT INTO patients (name, age, contact)
 VALUES
-('Shubham', 22, '9876543210'),
-('Sanjog', 25, '9876543211'),
-('Aayush', 30, '9876543212');
+('shubham', 22, '8434343434'),
+('sanjog', 25, '9872243211'),
+('aayush', 30, '9982222212');
 
 -- SAMPLE DOCTORS
 INSERT INTO doctors (name, specialization)
